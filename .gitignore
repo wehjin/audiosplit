@@ -1,0 +1,6 @@
+build/
+.gradle/
+example.txt
+example.mp3
+splits/
+.idea/
