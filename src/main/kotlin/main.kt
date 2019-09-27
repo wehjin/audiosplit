@@ -6,12 +6,14 @@ import java.io.File
 fun main(args: Array<String>) {
     val action = args[0]
     val mediaFile = File(args[1])
-    val silenceReader = BuildSilenceReader.from(mediaFile)
-    val sentences = FindSentences.from(silenceReader)
+    val sentences = FindSentences.from(BuildSilenceReader.from(mediaFile))
     when (action) {
         "clips" -> extractClipsToSplitsDir(sentences, mediaFile)
         "html" -> extractHtml(sentences, mediaFile)
-        else -> TODO(action)
+        else -> {
+            println("Example usage:\n  audioslice html example.mp3")
+            return
+        }
     }
     println("Min Duration: ${sentences.map { it.duration }.min().toPrint()}")
     println("Max Duration: ${sentences.map { it.duration }.max().toPrint()}")
