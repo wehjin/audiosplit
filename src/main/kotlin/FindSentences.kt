@@ -1,4 +1,4 @@
-import java.io.File
+import java.io.Reader
 import kotlin.math.max
 
 object FindSentences {
@@ -6,9 +6,9 @@ object FindSentences {
     private const val silenceStartLabel = "silence_start: "
     private const val fuzz = 0.15
 
-    fun from(file: File): List<Sentence> {
-        val (_, sentences) = file.useLines {
-            it.fold(initial = FindSentences.init(), operation = FindSentences::update)
+    fun from(reader: Reader): List<Sentence> {
+        val (_, sentences) = reader.useLines { lines ->
+            lines.fold(initial = init(), operation = FindSentences::update)
         }
         return sentences
     }
