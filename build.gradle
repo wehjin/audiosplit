@@ -1,12 +1,17 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.3.50'
+    id 'application'
 }
 
 group 'com.rubyhuntersky'
 version '0.1'
 
 sourceCompatibility = 1.8
+
+application {
+    mainClassName = 'com.rubyhuntersky.audiosplit.MainKt'
+}
 
 repositories {
     mavenCentral()

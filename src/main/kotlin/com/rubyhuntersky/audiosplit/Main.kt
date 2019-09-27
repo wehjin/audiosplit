@@ -1,19 +1,22 @@
+package com.rubyhuntersky.audiosplit
+
 import com.beust.klaxon.json
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
 import java.io.File
 
 fun main(args: Array<String>) {
-    val action = args[0]
+    val action = args.getOrNull(0)
+    if (action == null) {
+        println("Example usage:\n  audioslice html example.mp3")
+        return
+    }
     val mediaFile = File(args[1])
     val sentences = FindSentences.from(BuildSilenceReader.from(mediaFile))
     when (action) {
         "clips" -> extractClipsToSplitsDir(sentences, mediaFile)
         "html" -> extractHtml(sentences, mediaFile)
-        else -> {
-            println("Example usage:\n  audioslice html example.mp3")
-            return
-        }
+        else -> TODO(action)
     }
     println("Min Duration: ${sentences.map { it.duration }.min().toPrint()}")
     println("Max Duration: ${sentences.map { it.duration }.max().toPrint()}")
@@ -88,7 +91,7 @@ private fun extractClips(sentences: List<Sentence>, mediaFile: File, clipDir: Fi
         arrayOf(
             "ffmpeg",
             "-i", mediaFile.canonicalPath,
-            "-metadata", "title=\"Sentence $index\"",
+            "-metadata", "title=\"com.rubyhuntersky.audiosplit.Sentence $index\"",
             "-ss", "${sentence.start}",
             "-to", " ${sentence.end}",
             "-c", "copy", outFileSpec.path

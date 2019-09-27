@@ -1,3 +1,5 @@
+package com.rubyhuntersky.audiosplit
+
 import java.io.Reader
 import kotlin.math.max
 
@@ -35,7 +37,12 @@ object FindSentences {
                 } else {
                     val remaining = line.substring(silenceStartIndex + silenceStartLabel.length)
                     val startOfSilence = remaining.trim().toDouble()
-                    Pair(Partial.None, sentences + Sentence(partial.start, startOfSilence + fuzz))
+                    Pair(
+                        Partial.None, sentences + Sentence(
+                            partial.start,
+                            startOfSilence + fuzz
+                        )
+                    )
                 }
             }
         }
