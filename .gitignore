@@ -2,5 +2,6 @@ build/
 .gradle/
 example.txt
 example.mp3
+example.mp3.html
 splits/
 .idea/

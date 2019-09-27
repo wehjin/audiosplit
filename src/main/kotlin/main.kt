@@ -1,3 +1,4 @@
+import com.beust.klaxon.json
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
 import java.io.File
@@ -17,7 +18,7 @@ fun main(args: Array<String>) {
     println("Count: ${sentences.size}")
 }
 
-val playerScript = """
+const val playerScript = """
     const player = document.getElementById('player');
     function play(index, startTime, endTime) {
         player.pause();
@@ -32,7 +33,7 @@ val playerScript = """
         player.play();
         console.log('play', index);
     }
-""".trimIndent()
+"""
 
 private fun extractHtml(sentences: List<Sentence>, mediaFile: File) {
     val html = StringBuilder().appendHTML().html {
@@ -40,26 +41,35 @@ private fun extractHtml(sentences: List<Sentence>, mediaFile: File) {
             h2 { +mediaFile.name }
             audio { id = "player"; src = mediaFile.name; controls = true }
             script {
-                unsafe { raw(playerScript) }
+                unsafe { raw(playerScript.trimIndent()) }
             }
             sentences.forEachIndexed { index, sentence ->
+                val sentenceJson = json {
+                    obj(
+                        "index" to index,
+                        "start" to sentence.start.roundToThreeDecimals(),
+                        "end" to sentence.end.roundToThreeDecimals(),
+                        "duration" to sentence.duration.roundToThreeDecimals()
+                    )
+                }
                 div {
                     p {
                         a {
                             href = index.toHref()
                             onClick = "play($index, ${sentence.start}, ${sentence.end})"
-                            +"{ index = $index, start = ${sentence.start.format()}, end = ${sentence.end.format()}, duration = ${sentence.duration.format()} }"
+                            +sentenceJson.toJsonString(prettyPrint = true)
                         }
                     }
                 }
             }
         }
     }.toString()
-    File("index.html").writeText(html)
+    File("${mediaFile.name}.html").writeText(html)
 }
 
 private fun Int.toHref() = String.format("#sentence%03d", this)
-private fun Double.format() = String.format("%.3f", this)
+private fun Double.toThreeDecimals() = String.format("%.3f", this)
+private fun Double.roundToThreeDecimals() = this.toThreeDecimals().toDouble()
 
 private fun extractClipsToSplitsDir(sentences: List<Sentence>, mediaFile: File) {
     val outDir = File("splits").apply {
