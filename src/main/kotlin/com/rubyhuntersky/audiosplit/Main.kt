@@ -52,9 +52,9 @@ private fun extractHtml(sentences: List<Sentence>, mediaFile: File) {
                 val sentenceJson = json {
                     obj(
                         "index" to index,
-                        "start" to sentence.start.roundToThreeDecimals(),
-                        "end" to sentence.end.roundToThreeDecimals(),
-                        "duration" to sentence.duration.roundToThreeDecimals()
+                        "start" to sentence.start.roundToSixDecimals(),
+                        "end" to sentence.end.roundToSixDecimals(),
+                        "duration" to sentence.duration.roundToSixDecimals()
                     )
                 }
                 div {
@@ -73,8 +73,7 @@ private fun extractHtml(sentences: List<Sentence>, mediaFile: File) {
 }
 
 private fun Int.toHref() = String.format("#sentence%03d", this)
-private fun Double.toThreeDecimals() = String.format("%.3f", this)
-private fun Double.roundToThreeDecimals() = this.toThreeDecimals().toDouble()
+private fun Double.roundToSixDecimals() = String.format("%.6f", this).toDouble()
 
 private fun extractClipsToSplitsDir(sentences: List<Sentence>, mediaFile: File) {
     val outDir = File("splits").apply {

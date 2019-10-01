@@ -8,7 +8,7 @@ object BuildSilenceReader {
         val command = arrayOf(
             "ffmpeg",
             "-i", mediaFile.canonicalPath,
-            "-af", "silencedetect=noise=0.05:d=0.495",
+            "-af", "silencedetect=noise=0.05:d=0.420",
             "-f", "null",
             "-"
         )
