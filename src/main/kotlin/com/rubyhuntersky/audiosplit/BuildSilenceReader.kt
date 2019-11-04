@@ -4,11 +4,12 @@ import java.io.File
 import java.io.Reader
 
 object BuildSilenceReader {
+    private const val duration = 0.495
     fun from(mediaFile: File): Reader {
         val command = arrayOf(
             "ffmpeg",
             "-i", mediaFile.canonicalPath,
-            "-af", "silencedetect=noise=0.05:d=0.420",
+            "-af", "silencedetect=noise=0.05:d=$duration",
             "-f", "null",
             "-"
         )

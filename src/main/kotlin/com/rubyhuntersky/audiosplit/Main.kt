@@ -6,9 +6,10 @@ import kotlinx.html.stream.appendHTML
 import java.io.File
 
 fun main(args: Array<String>) {
+    val name = "audiosplit"
     val action = args.getOrNull(0)
     if (action == null) {
-        println("Example usage:\n  audioslice html example.mp3")
+        println("Example usage:\n  $name <html/json/clips> example.mp3")
         return
     }
     val mediaFile = File(args[1])
@@ -16,6 +17,7 @@ fun main(args: Array<String>) {
     when (action) {
         "clips" -> extractClipsToSplitsDir(sentences, mediaFile)
         "html" -> extractHtml(sentences, mediaFile)
+        "json" -> extractJson(sentences, mediaFile)
         else -> TODO(action)
     }
     println("Min Duration: ${sentences.map { it.duration }.min().toPrint()}")
@@ -39,6 +41,23 @@ const val playerScript = """
         console.log('play', index);
     }
 """
+
+private fun extractJson(sentences: List<Sentence>, mediaFile: File) {
+    val jsonArray = json {
+        array(
+            sentences.mapIndexed { index, sentence ->
+                obj(
+                    "index" to index,
+                    "start" to sentence.start.roundToSixDecimals(),
+                    "end" to sentence.end.roundToSixDecimals(),
+                    "duration" to sentence.duration.roundToSixDecimals()
+                )
+            }
+        )
+    }
+    val json = jsonArray.toJsonString(prettyPrint = true)
+    File("${mediaFile.name}.json").writeText(json)
+}
 
 private fun extractHtml(sentences: List<Sentence>, mediaFile: File) {
     val html = StringBuilder().appendHTML().html {
