@@ -6,7 +6,7 @@ import kotlin.math.max
 object FindSentences {
     private const val silenceEndLabel = "silence_end: "
     private const val silenceStartLabel = "silence_start: "
-    private const val fuzz = 0.15
+    private const val fuzz = 0.25
 
     fun from(reader: Reader): List<Sentence> {
         val (_, sentences) = reader.useLines { lines ->
