@@ -4,7 +4,7 @@ import java.io.File
 import java.io.Reader
 
 object BuildSilenceReader {
-    private const val duration = 0.495
+    private const val duration = 0.420
     fun from(mediaFile: File): Reader {
         val command = arrayOf(
             "ffmpeg",
