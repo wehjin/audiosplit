@@ -56,7 +56,10 @@ private fun extractJson(sentences: List<Sentence>, mediaFile: File) {
                     "index" to index,
                     "start" to sentence.start.roundToSixDecimals(),
                     "end" to sentence.end.roundToSixDecimals(),
-                    "duration" to sentence.duration.roundToSixDecimals()
+                    "duration" to sentence.duration.roundToSixDecimals(),
+                    "kana" to "phrase$index",
+                    "speaker" to "unknown",
+                    "phrase" to index
                 )
             }
         )
