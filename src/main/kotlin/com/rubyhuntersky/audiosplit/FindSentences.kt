@@ -40,7 +40,7 @@ object FindSentences {
                     Pair(
                         Partial.None, sentences + Sentence(
                             partial.start,
-                            startOfSilence + fuzz
+                            startOfSilence + fuzz / 3
                         )
                     )
                 }

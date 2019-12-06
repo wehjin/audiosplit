@@ -13,7 +13,9 @@ fun main(args: Array<String>) {
         return
     }
     val mediaFile = File(args[1])
-    val sentences = FindSentences.from(BuildSilenceReader.from(mediaFile))
+    val silenceTime = args.getOrNull(2)?.toDoubleOrNull() ?: 0.420
+    println("Silence time: $silenceTime seconds")
+    val sentences = sentences(mediaFile, silenceTime)
     when (action) {
         "clips" -> extractClipsToSplitsDir(sentences, mediaFile)
         "html" -> extractHtml(sentences, mediaFile)
@@ -23,6 +25,10 @@ fun main(args: Array<String>) {
     println("Min Duration: ${sentences.map { it.duration }.min().toPrint()}")
     println("Max Duration: ${sentences.map { it.duration }.max().toPrint()}")
     println("Count: ${sentences.size}")
+}
+
+private fun sentences(mediaFile: File, duration: Double): List<Sentence> {
+    return FindSentences.from(silenceReader(mediaFile, duration))
 }
 
 const val playerScript = """
