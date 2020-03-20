@@ -54,8 +54,11 @@ private fun extractJson(sentences: List<Sentence>, mediaFile: File) {
             sentences.mapIndexed { index, sentence ->
                 obj(
                     "index" to index,
-                    "start" to sentence.start.roundToSixDecimals(),
-                    "end" to sentence.end.roundToSixDecimals(),
+                    "description" to "",
+                    "start" to index,
+                    "end" to index,
+                    "start-time" to sentence.start.roundToSixDecimals(),
+                    "end-time" to sentence.end.roundToSixDecimals(),
                     "duration" to sentence.duration.roundToSixDecimals(),
                     "kana" to "phrase$index",
                     "speaker" to "unknown",
